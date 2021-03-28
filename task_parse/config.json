@@ -5,7 +5,7 @@
         "tag": "div",
         "class": "b-topic__content"
       },
-      "ignore_classes": [ "b-socials", "b-box", "voice-over", "b-topic__title-image" ],
+      "ignore_classes": [ "b-socials", "b-box", "voice-over", "b-topic__title-image", "b-inline-topics-box" ],
       "ignore_ids": []
     },
     "www.gazeta.ru": {
