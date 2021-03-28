@@ -1,14 +1,15 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 
 class Parser():
 
 
-    def __init__(self, text, content_area, tags, host):
+    def __init__(self, text, content_area, tags_and_classes, host):
         self._text = text #Содержит ответ сервера  
         self._content_area = content_area #Область полезного конента
-        self._tags = tags
+        self._tags_and_classes = tags_and_classes #теги и классы для разделения на абзацы
         self.list_texts = []
         self._host = host
+        self._list_contents = []
 
     def _get_soup(self):
         try:
@@ -18,66 +19,74 @@ class Parser():
             self._soup = BeautifulSoup()
 
     def _get_area_content(self):
-        _place = self._content_area.get('place', {})
-        _tag_view = _place.get('tag', '')
-        _class_css =  _place.get('class', '')
-        self._view = self._soup.find_all(_tag_view, class_=_class_css)
+        place = self._content_area.get('place', {})
+        tag_view = place.get('tag', '')
+        class_css =  place.get('class', '')
+        self._view = self._soup.find_all(tag_view, class_=class_css)
 
     def _del_ignore_elements(self):
-        _ignore_classes = self._content_area.get('ignore_class', {})
-        _ignore_ids = self._content_area.get('ignore_id', {})
-        for _element in self._view:
-            for _ignore_class in _ignore_classes:
-                for _find_element in _element.find_all(class_=_ignore_class):
-                    _find_element.decompose()
-            for _ignore_id in _ignore_ids:
-                for _find_element in _element.find_all(id=_ignore_id):
-                    _find_element.decompose()
+        ignore_classes = self._content_area.get('ignore_class', {})
+        ignore_ids = self._content_area.get('ignore_id', {})
+        for element in self._view:    
+            if ignore_classes:
+                for find_element in element.find_all(class_=ignore_classes):
+                    find_element.decompose()
+            if ignore_ids:
+                for find_element in element.find_all(id=ignore_ids):
+                    find_element.decompose()
 
+    def _del_comments(self):
+        for element in self._view:
+            for comments in element.find_all(text=
+                                             lambda text: 
+                                             isinstance(text, Comment)):
+                comments.extract()
 
     def _get_href(self):
-        for _i in range(len(self._view)):                
-            for _element in self._view[_i].find_all(href=True):
-                _href = _element.get('href')
-                if "http" not in _href:
-                    _href = self._host + _href
+        for element in self._view:                
+            for element_href in element.find_all(href=True):
+                href = element_href.get('href')
+                if "http" not in href:
+                    href = self._host + href
                 try:
-                    _element.string += f" [{_href}]"
+                    element_href.string += f" [{href}]"
                 except:
                     pass
 
-    def _get_content(self):
+    def _get_paragraph_content(self):
 
-        def recursion(_DOM_elements):        
-            for _element in _DOM_elements:
-                if hasattr(_element,"contents"):
-                    if _element.name in self._tags or _element.class_ in self._tags:
-                        self._list_contents.append(_element)
-                    else:       
-                    
-                        if _element.find(self._tags) or _element.find(class_=self._tags):                        
-                            recursion(_element.contents)
+        def recursion(DOM_elements):        
+            for element in DOM_elements:
+                if hasattr(element,"contents"):
+                    if (element.name in self._tags_and_classes 
+                            or element.class_ in self._tags_and_classes):
+                        self._list_contents.append(element)
+                    else:
+                        if (element.find(self._tags_and_classes)
+                                or element.find(class_=self._tags_and_classes)):                        
+                            recursion(element.children)
                         else:
-                            self._list_contents.append(_element)
+                            self._list_contents.append(element)
                 else:
-                        self._list_contents.append(_element)
+                        self._list_contents.append(element)
 
-        self._list_contents = []
         recursion(self._view)
+
+    def _get_list_texts(self):
+        for element in self._list_contents:
+                if hasattr(element, 'contents'):
+                    text = element.get_text().strip()
+                else:
+                    text = str(element).strip()
+                if text != '':
+                    self.list_texts.append(text)
                    
-    def parse(self):
-                
+    def parse(self):                
         if self._content_area:
             self._get_soup()
             self._get_area_content()
             self._del_ignore_elements()
+            self._del_comments()
             self._get_href()
-            self._get_content()
-            
-            for _element in self._list_contents:
-                if hasattr(_element, 'contents'):
-                    _text = _element.get_text().strip()
-                else:
-                    _text = str(_element).strip()
-                if _text != '':
-                    self.list_texts.append(_text)
+            self._get_paragraph_content()
+            self._get_list_texts()

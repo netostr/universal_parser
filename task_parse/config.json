@@ -37,17 +37,11 @@
         "tag": "article",
         "class": "article"
       },
-      "ignore_class": [],
-      "ignore_id": []
-    },
-    "www.crummy.com": {
-      "place": {
-        "tag": "div",
-        "class": "body"
-      },
-      "ignore_class": [],
+      "ignore_class": [ "article__media", "share", "tags" ],
       "ignore_id": []
     }
   },
-  "tags": [ "p", "h1", "h2", "h3", "h4", "h5", "h6", "article__block" ]
+  "tags_and_classes": [ "p", "h1", "h2", "h3", "h4", "h5", "h6", "article__block" ],
+  "cur_dir": "test",
+  "line_width": 80
 }
