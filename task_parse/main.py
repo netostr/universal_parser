@@ -44,20 +44,18 @@ if __name__ == "__main__":
         if is_valid_url(url):
             
             #Шаблоны обработки страниц
-            content_area = get_param(website, url.split('/')[2], {})
+            patterns = get_param(website, url.split('/')[2], {})
             
             #Проверка на наличие шаблонов
-            if not content_area:
-                print("Пожалуйста добавьте шаблон обработки для сайта в config.json")
-            else:
+            if patterns:                
                 r = requests.get(url)
 
                 #По статусу get-запроса начинаем прасить и форматировать
                 #или выводим код ошибки
                 if r.status_code == 200:
                     host = '/'.join(url.split('/')[:3])
-                    obj_parser = Parser(text=r.text, 
-                                        content_area=content_area, 
+                    obj_parser = Parser(content=r.text, 
+                                        patterns=patterns, 
                                         tags_and_classes=tags_and_classes, 
                                         host=host)
                     obj_parser.parse()
@@ -68,6 +66,8 @@ if __name__ == "__main__":
                     obj_formatter.formate()
                 else:
                     print(f'Код ошибки {r.status_code}')
+            else:
+                print("Пожалуйста добавьте шаблон обработки для сайта в config.json")
         else:
             print("Неверный URL-адрес")
 
