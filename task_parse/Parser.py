@@ -28,8 +28,8 @@ class Parser():
 
     def _del_ignore_elements(self):
         '''Метод удаления ненужных элементов.'''
-        ignore_classes = self._patterns.get('ignore_class', {})
-        ignore_ids = self._patterns.get('ignore_id', {})
+        ignore_classes = self._patterns.get('ignore_classes', {})
+        ignore_ids = self._patterns.get('ignore_ids', {})
         for element in self._view:    
             if ignore_classes:
                 for find_element in element.find_all(class_=ignore_classes):

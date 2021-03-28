@@ -5,40 +5,40 @@
         "tag": "div",
         "class": "b-topic__content"
       },
-      "ignore_class": [ "b-socials", "b-box", "voice-over", "b-topic__title-image" ],
-      "ignore_id": []
+      "ignore_classes": [ "b-socials", "b-box", "voice-over", "b-topic__title-image" ],
+      "ignore_ids": []
     },
     "www.gazeta.ru": {
       "place": {
         "tag": "article",
         "class": "main_article b-article"
       },
-      "ignore_class": [ "b_audio_wrapper", "main_pic_in_block", "borderdown", "AdCentre_name" ],
-      "ignore_id": [ "right", "article_pants" ]
+      "ignore_classes": [ "b_audio_wrapper", "main_pic_in_block", "borderdown", "AdCentre_name" ],
+      "ignore_ids": [ "right", "article_pants" ]
     },
     "ria.ru": {
       "place": {
         "tag": "div",
         "class": "layout-article__600-align"
       },
-      "ignore_class": [ "article__meta", "article__announce", "article__aggr", "article__article", "article__tags" ],
-      "ignore_id": []
+      "ignore_classes": [ "article__meta", "article__announce", "article__aggr", "article__article", "article__tags" ],
+      "ignore_ids": []
     },
     "76.ru": {
       "place": {
         "tag": "div",
         "class": "central-column-container"
       },
-      "ignore_class": [ "NXa41", "JNaf", "GNahp", "NTa4p", "NJa33", "CRpj", "F9afj", "IFao3" ],
-      "ignore_id": []
+      "ignore_classes": [ "NXa41", "JNaf", "GNahp", "NTa4p", "NJa33", "CRpj", "F9afj", "IFao3" ],
+      "ignore_ids": []
     },
     "www.vesti.ru": {
       "place": {
         "tag": "article",
         "class": "article"
       },
-      "ignore_class": [ "article__media", "share", "tags" ],
-      "ignore_id": []
+      "ignore_classes": [ "article__media", "share", "tags" ],
+      "ignore_ids": []
     }
   },
   "tags_and_classes": [ "p", "h1", "h2", "h3", "h4", "h5", "h6", "article__block" ],
